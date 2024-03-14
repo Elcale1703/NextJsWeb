@@ -2,7 +2,9 @@
 import * as Accordion from '@radix-ui/react-accordion';
 
 import Plus from '../../public/assets/Plus.svg';
+import Minus from '../../public/assets/minus-icon.png';
 import Image from 'next/image';
+import { useState } from 'react';
 
 const items = [
     {
@@ -50,6 +52,13 @@ const items = [
 ];
 
 export function Faq() {
+
+    const [activeItem, setActiveItem] = useState('item-1');
+
+    const handleItemClick = (value: string) => {
+        setActiveItem(activeItem === value ? '' : value);
+    };
+
     return(
         <div className="flex flex-col w-full py-[48px] lg:py-[60px] lg:flex-row lg:gap-x-6">
             <div className='lg:w-1/3 lg:py-[32px] lg:pr-[56px]'>
@@ -67,14 +76,14 @@ export function Faq() {
                     collapsible
                     className='flex flex-col gap-y-4'
                 >
-                    {items.map((item, index) =>(
+                    {items.map((item, index) => (
                         <div key={index}>
                             <Accordion.Item value={`item-${index + 1}`} className='bg-[#E3F1FF] p-[16px] rounded-[8px]'>
                                 <Accordion.Header>
-                                    <Accordion.Trigger className='flex w-full items-center justify-between'>
+                                    <Accordion.Trigger className='flex w-full items-center justify-between' onClick={() => handleItemClick(`item-${index + 1}`)}>
                                         <p className='text-left text-medium text-[#172026] lg:text-[18px]'>{item.question}</p>
                                         <span>
-                                            <Image src={Plus} alt='See more' className='h-10 w-10 lg:w-6 lg:h-6' />
+                                            <Image src={activeItem === `item-${index + 1}` ? Minus : Plus} alt='Toggle' className='h-10 w-10 lg:w-6 lg:h-6' />
                                         </span>
                                     </Accordion.Trigger>
                                 </Accordion.Header>
@@ -84,7 +93,7 @@ export function Faq() {
                             </Accordion.Item>
                         </div>
                     ))}
-                </Accordion.Root> 
+                </Accordion.Root>
             </div>
         </div>
     );
